@@ -260,8 +260,9 @@ const NAV = [
 
 const MARQUEE = ["Athens", "Madison", "Huntsville", "Decatur", "Rogersville", "Elkmont", "Harvest"];
 
-// Real client reviews. Add more as they come in — layout adjusts automatically.
-const REVIEWS = [
+// Built-in fallbacks. Used only if Airtable is empty or not connected,
+// so the site always shows something.
+const DEFAULT_REVIEWS = [
   {
     text: "Colby is very friendly and detail oriented. He really helped me to understand the home-buying process.",
     name: "Rett Krome",
@@ -269,9 +270,78 @@ const REVIEWS = [
   },
 ];
 
+const DEFAULT_LISTINGS = [
+  {
+    address: "213 Rosecliff Drive",
+    city: "Harvest, AL 35749",
+    price: "$335,000",
+    specs: "4 BD · 2.5 BA · 2,442 SQFT",
+    blurb: "A classic two-story colonial on a quiet, tree-lined lot in Harvest, just minutes from Madison and the Research Park corridor. Easy layout, lots of natural light, and room to grow. Want to walk through it?",
+    status: "For sale",
+    image: "/images/listing-rosecliff.jpg",
+  },
+];
+
+function ListingFeatured({ l }) {
+  return (
+    <div className="tile grid-2 reveal" style={{ display: "grid", gridTemplateColumns: "1.12fr 0.88fr", background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", marginTop: 36 }}>
+      <div style={{ position: "relative", minHeight: 360, overflow: "hidden" }}>
+        {l.image ? <img src={l.image} alt={l.address} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} /> : null}
+        <span className="mono" style={{ position: "absolute", top: 16, left: 16, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", padding: "6px 12px" }}>{l.status || "For sale"}</span>
+      </div>
+      <div style={{ padding: "clamp(28px,4vw,44px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        {l.city ? <div className="mono" style={{ fontSize: 12, color: "var(--ink-soft)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{l.city}</div> : null}
+        {l.price ? <div className="display" style={{ fontSize: "clamp(30px,4vw,42px)", marginTop: 8 }}>{l.price}</div> : null}
+        <div className="display" style={{ fontSize: 19, marginTop: 4, color: "var(--ink)" }}>{l.address}</div>
+        {l.specs ? <div className="mono" style={{ fontSize: 13, color: "var(--brand)", letterSpacing: "0.06em", marginTop: 14 }}>{l.specs}</div> : null}
+        {l.blurb ? <p style={{ color: "var(--ink-soft)", fontSize: 15.5, marginTop: 16, lineHeight: 1.6 }}>{l.blurb}</p> : null}
+        <div className="flex flex-wrap gap-3" style={{ marginTop: 24 }}>
+          <a href="#contact" className="btn btn-primary">Book a showing</a>
+          <a href="#contact" className="btn btn-ghost">Ask about this home</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ListingCard({ l }) {
+  return (
+    <div className="tile reveal" style={{ background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+      <div style={{ position: "relative", aspectRatio: "3/2", overflow: "hidden" }}>
+        {l.image ? <img src={l.image} alt={l.address} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} /> : null}
+        <span className="mono" style={{ position: "absolute", top: 12, left: 12, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 10.5, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 10px" }}>{l.status || "For sale"}</span>
+      </div>
+      <div style={{ padding: 22, display: "flex", flexDirection: "column", flex: 1 }}>
+        {l.city ? <div className="mono" style={{ fontSize: 11, color: "var(--ink-soft)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{l.city}</div> : null}
+        {l.price ? <div className="display" style={{ fontSize: 24, marginTop: 6 }}>{l.price}</div> : null}
+        <div className="display" style={{ fontSize: 16, marginTop: 2, color: "var(--ink)" }}>{l.address}</div>
+        {l.specs ? <div className="mono" style={{ fontSize: 12, color: "var(--brand)", letterSpacing: "0.05em", marginTop: 10 }}>{l.specs}</div> : null}
+        <a href="#contact" className="btn btn-primary" style={{ marginTop: 18, justifyContent: "center" }}>Book a showing</a>
+      </div>
+    </div>
+  );
+}
+
 export default function ColbyWilliamsHome() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
+  const [listings, setListings] = useState(DEFAULT_LISTINGS);
+  const [reviews, setReviews] = useState(DEFAULT_REVIEWS);
+
+  // Pull listings + reviews from Airtable (falls back to defaults on any issue).
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/content")
+      .then((r) => r.json())
+      .then((d) => {
+        if (!alive) return;
+        if (d.listings && d.listings.length) setListings(d.listings);
+        if (d.reviews && d.reviews.length) setReviews(d.reviews);
+      })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [formError, setFormError] = useState("");
@@ -513,24 +583,14 @@ export default function ColbyWilliamsHome() {
             </div>
             <a href="#contact" className="mono link-u" style={{ color: "var(--brand)", fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>Ask about a home →</a>
           </div>
-          <div className="tile grid-2 reveal" style={{ display: "grid", gridTemplateColumns: "1.12fr 0.88fr", background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", marginTop: 36 }}>
-            <div style={{ position: "relative", minHeight: 360, overflow: "hidden" }}>
-              <img src={LISTING1} alt="213 Rosecliff Drive, Harvest, Alabama" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-              <span className="mono" style={{ position: "absolute", top: 16, left: 16, background: "var(--brand)", color: "#fff", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", padding: "6px 12px" }}>For sale</span>
+          {listings.length === 1 ? (
+            <ListingFeatured l={listings[0]} />
+          ) : (
+            <div className="grid gap-6 grid-3" style={{ gridTemplateColumns: "repeat(3,1fr)", marginTop: 36 }}>
+              {listings.map((l, i) => <ListingCard key={i} l={l} />)}
             </div>
-            <div style={{ padding: "clamp(28px,4vw,44px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <div className="mono" style={{ fontSize: 12, color: "var(--ink-soft)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Harvest, AL 35749</div>
-              <div className="display" style={{ fontSize: "clamp(30px,4vw,42px)", marginTop: 8 }}>$335,000</div>
-              <div className="display" style={{ fontSize: 19, marginTop: 4, color: "var(--ink)" }}>213 Rosecliff Drive</div>
-              <div className="mono" style={{ fontSize: 13, color: "var(--brand)", letterSpacing: "0.06em", marginTop: 14 }}>4 BD · 2.5 BA · 2,442 SQFT</div>
-              <p style={{ color: "var(--ink-soft)", fontSize: 15.5, marginTop: 16, lineHeight: 1.6 }}>A classic two-story colonial on a quiet, tree-lined lot in Harvest, just minutes from Madison and the Research Park corridor. Easy layout, lots of natural light, and room to grow. Want to walk through it?</p>
-              <div className="flex flex-wrap gap-3" style={{ marginTop: 24 }}>
-                <a href="#contact" className="btn btn-primary">Book a showing</a>
-                <a href="#contact" className="btn btn-ghost">Ask about this home</a>
-              </div>
-            </div>
-          </div>
-          <p className="mono" style={{ fontSize: 11.5, color: "var(--ink-soft)", marginTop: 20, letterSpacing: "0.04em" }}>Details believed accurate; confirm with listing agent. More listings coming soon.</p>
+          )}
+          <p className="mono" style={{ fontSize: 11.5, color: "var(--ink-soft)", marginTop: 20, letterSpacing: "0.04em" }}>Details believed accurate; confirm with listing agent.</p>
         </div>
       </section>
 
@@ -606,7 +666,7 @@ export default function ColbyWilliamsHome() {
           <div className="eyebrow" style={{ marginBottom: 14 }}>What clients say</div>
           <h2 style={{ fontSize: "clamp(30px,4vw,46px)" }}>People you can call and ask</h2>
           <div className="flex flex-wrap justify-center gap-6" style={{ marginTop: 36 }}>
-            {REVIEWS.map((r, i) => (
+            {reviews.map((r, i) => (
               <div key={i} style={{ padding: 30, background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, flex: "1 1 340px", maxWidth: 460 }}>
                 <Quote size={26} style={{ color: "var(--brand)" }} fill="currentColor" />
                 <p style={{ marginTop: 16, fontSize: 16, color: "var(--ink)" }}>“{r.text}”</p>
