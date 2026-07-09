@@ -1,4 +1,5 @@
 import "./globals.css";
+import Analytics from "./analytics";
 
 export const metadata = {
   metadataBase: new URL("https://colbywilliamsrealtor.com"),
@@ -35,6 +36,20 @@ const schema = {
   address: { "@type": "PostalAddress", addressLocality: "Athens", addressRegion: "AL", addressCountry: "US" },
 };
 
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        {children}
+        <Analytics />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      </body>
+    </html>
+  );
+}
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
