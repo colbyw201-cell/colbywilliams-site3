@@ -50,16 +50,3 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
-export default function RootLayout({ children }) {
-  return (
-    <html lang="en">
-      <body>
-        {children}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      </body>
-    </html>
-  );
-}
