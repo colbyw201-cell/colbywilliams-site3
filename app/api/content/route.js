@@ -48,6 +48,7 @@ export async function GET() {
         specs: specs(f),
         blurb: f.Blurb || "",
         status: f.Status || "For sale",
+        images: (f.Photo || []).map((p) => p.url).filter(Boolean),
         image: f.Photo?.[0]?.url || "",
       };
     }).filter((l) => l.address);
