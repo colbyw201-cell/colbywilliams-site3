@@ -316,7 +316,7 @@ function ListingCard({ l }) {
         {l.price ? <div className="display" style={{ fontSize: 24, marginTop: 6 }}>{l.price}</div> : null}
         <div className="display" style={{ fontSize: 16, marginTop: 2, color: "var(--ink)" }}>{l.address}</div>
         {l.specs ? <div className="mono" style={{ fontSize: 12, color: "var(--brand)", letterSpacing: "0.05em", marginTop: 10 }}>{l.specs}</div> : null}
-        {l.blurb ? <p style={{ color: "var(--ink-soft)", fontSize: 14, marginTop: 12, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{l.blurb}</p> : null}
+        {l.blurb ? <p style={{ color: "var(--ink-soft)", fontSize: 15, marginTop: 12, lineHeight: 1.55 }}>{l.blurb}</p> : null}
         <a href="#contact" className="btn btn-primary" style={{ marginTop: "auto", justifyContent: "center", paddingTop: 18 }}>Book a showing</a>
       </div>
     </div>
@@ -587,7 +587,7 @@ export default function ColbyWilliamsHome() {
           {listings.length === 1 ? (
             <ListingFeatured l={listings[0]} />
           ) : (
-            <div className="grid gap-6 grid-3" style={{ gridTemplateColumns: "repeat(3,1fr)", marginTop: 36 }}>
+            <div className="grid gap-8 grid-2" style={{ gridTemplateColumns: "repeat(2,1fr)", marginTop: 36 }}>
               {listings.map((l, i) => <ListingCard key={i} l={l} />)}
             </div>
           )}
