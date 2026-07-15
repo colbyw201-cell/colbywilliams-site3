@@ -316,7 +316,8 @@ function ListingCard({ l }) {
         {l.price ? <div className="display" style={{ fontSize: 24, marginTop: 6 }}>{l.price}</div> : null}
         <div className="display" style={{ fontSize: 16, marginTop: 2, color: "var(--ink)" }}>{l.address}</div>
         {l.specs ? <div className="mono" style={{ fontSize: 12, color: "var(--brand)", letterSpacing: "0.05em", marginTop: 10 }}>{l.specs}</div> : null}
-        <a href="#contact" className="btn btn-primary" style={{ marginTop: 18, justifyContent: "center" }}>Book a showing</a>
+        {l.blurb ? <p style={{ color: "var(--ink-soft)", fontSize: 14, marginTop: 12, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{l.blurb}</p> : null}
+        <a href="#contact" className="btn btn-primary" style={{ marginTop: "auto", justifyContent: "center", paddingTop: 18 }}>Book a showing</a>
       </div>
     </div>
   );
