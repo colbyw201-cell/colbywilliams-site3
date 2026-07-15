@@ -284,7 +284,7 @@ const DEFAULT_LISTINGS = [
 
 function ListingFeatured({ l }) {
   return (
-    <div className="tile grid-2 reveal" style={{ display: "grid", gridTemplateColumns: "1.12fr 0.88fr", background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", marginTop: 36 }}>
+    <div className="tile grid-2" style={{ display: "grid", gridTemplateColumns: "1.12fr 0.88fr", background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", marginTop: 36 }}>
       <div style={{ position: "relative", minHeight: 360, overflow: "hidden" }}>
         {l.image ? <img src={l.image} alt={l.address} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} /> : null}
         <span className="mono" style={{ position: "absolute", top: 16, left: 16, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", padding: "6px 12px" }}>{l.status || "For sale"}</span>
@@ -306,7 +306,7 @@ function ListingFeatured({ l }) {
 
 function ListingCard({ l }) {
   return (
-    <div className="tile reveal" style={{ background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+    <div className="tile" style={{ background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", display: "flex", flexDirection: "column" }}>
       <div style={{ position: "relative", aspectRatio: "3/2", overflow: "hidden" }}>
         {l.image ? <img src={l.image} alt={l.address} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} /> : null}
         <span className="mono" style={{ position: "absolute", top: 12, left: 12, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 10.5, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 10px" }}>{l.status || "For sale"}</span>
