@@ -278,16 +278,55 @@ const DEFAULT_LISTINGS = [
     specs: "4 BD · 2.5 BA · 2,442 SQFT",
     blurb: "A classic two-story colonial on a quiet, tree-lined lot in Harvest, just minutes from Madison and the Research Park corridor. Easy layout, lots of natural light, and room to grow. Want to walk through it?",
     status: "For sale",
-    image: "/images/listing-rosecliff.jpg",
+    images: ["/images/listing-rosecliff.jpg"],
   },
 ];
+
+function Carousel({ images, alt }) {
+  const [i, setI] = useState(0);
+  const pics = (images || []).filter(Boolean);
+  const n = pics.length;
+  const cur = pics[i] || pics[0];
+  const go = (d) => (e) => { e.preventDefault(); e.stopPropagation(); setI((p) => (p + d + n) % n); };
+  const arrowBtn = (side) => ({
+    position: "absolute", top: "50%", [side]: 10, transform: "translateY(-50%)", zIndex: 2,
+    width: 34, height: 34, borderRadius: "50%", border: "none", background: "rgba(20,19,18,0.55)",
+    color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+    backdropFilter: "blur(2px)",
+  });
+  return (
+    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg,#2a2523,var(--brand-deep))" }}>
+      {cur ? <img src={cur} alt={alt} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} /> : null}
+      {n > 1 && (
+        <>
+          <button onClick={go(-1)} aria-label="Previous photo" style={arrowBtn("left")}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <button onClick={go(1)} aria-label="Next photo" style={arrowBtn("right")}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+          <div style={{ position: "absolute", bottom: 12, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6, zIndex: 2 }}>
+            {pics.map((_, k) => (
+              <span key={k} onClick={(e) => { e.preventDefault(); e.stopPropagation(); setI(k); }}
+                style={{ width: k === i ? 18 : 7, height: 7, borderRadius: 4, background: k === i ? "#fff" : "rgba(255,255,255,0.55)", cursor: "pointer", transition: "width .2s" }} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function listingImages(l) {
+  return l.images && l.images.length ? l.images : (l.image ? [l.image] : []);
+}
 
 function ListingFeatured({ l }) {
   return (
     <div className="tile grid-2" style={{ display: "grid", gridTemplateColumns: "1.12fr 0.88fr", background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", marginTop: 36 }}>
       <div style={{ position: "relative", minHeight: 360, overflow: "hidden" }}>
-        {l.image ? <img src={l.image} alt={l.address} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} /> : null}
-        <span className="mono" style={{ position: "absolute", top: 16, left: 16, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", padding: "6px 12px" }}>{l.status || "For sale"}</span>
+        <Carousel images={listingImages(l)} alt={l.address} />
+        <span className="mono" style={{ position: "absolute", top: 16, left: 16, zIndex: 3, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", padding: "6px 12px" }}>{l.status || "For sale"}</span>
       </div>
       <div style={{ padding: "clamp(28px,4vw,44px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
         {l.city ? <div className="mono" style={{ fontSize: 12, color: "var(--ink-soft)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{l.city}</div> : null}
@@ -308,8 +347,8 @@ function ListingCard({ l }) {
   return (
     <div className="tile" style={{ background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2, overflow: "hidden", display: "flex", flexDirection: "column" }}>
       <div style={{ position: "relative", aspectRatio: "3/2", overflow: "hidden" }}>
-        {l.image ? <img src={l.image} alt={l.address} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} /> : null}
-        <span className="mono" style={{ position: "absolute", top: 12, left: 12, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 10.5, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 10px" }}>{l.status || "For sale"}</span>
+        <Carousel images={listingImages(l)} alt={l.address} />
+        <span className="mono" style={{ position: "absolute", top: 12, left: 12, zIndex: 3, background: l.status === "Sold" ? "var(--ink)" : "var(--brand)", color: "#fff", fontSize: 10.5, letterSpacing: "0.1em", textTransform: "uppercase", padding: "5px 10px" }}>{l.status || "For sale"}</span>
       </div>
       <div style={{ padding: 22, display: "flex", flexDirection: "column", flex: 1 }}>
         {l.city ? <div className="mono" style={{ fontSize: 11, color: "var(--ink-soft)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{l.city}</div> : null}
