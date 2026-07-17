@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Menu, X, Phone, MapPin, ArrowRight, ArrowUpRight, Home, Key,
-  Check, Star, ChevronDown, Mail, Quote,
+  Check, Star, ChevronDown, Mail, Quote, MessageSquare,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────
@@ -755,7 +755,8 @@ export default function ColbyWilliamsHome() {
             <h2 style={{ fontSize: "clamp(34px,5vw,60px)", color: "#fff", maxWidth: 760 }}>Ready when you are.</h2>
             <p style={{ opacity: 0.8, marginTop: 18, fontSize: 17.5, maxWidth: 560 }}>Six months out or ready this week? Reach out and I'll help you figure out the smart next step. No pressure, ever.</p>
             <div className="flex flex-wrap gap-3" style={{ marginTop: 32 }}>
-              <a href="tel:+12567102384" className="btn btn-light"><Phone size={16} /> Call or text Colby</a>
+              <a href="tel:+12567102384" className="btn btn-light"><Phone size={16} /> Call Colby</a>
+              <a href="sms:+12567102384" className="btn btn-ghost" style={{ color: "#fff", borderColor: "rgba(255,255,255,0.35)" }}><MessageSquare size={16} /> Text Colby</a>
             </div>
           </div>
         </div>
