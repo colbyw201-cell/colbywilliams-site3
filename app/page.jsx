@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Menu, X, Phone, MapPin, ArrowRight, ArrowUpRight, Home, Key,
-  Check, Star, ChevronDown, Mail, Quote, MessageSquare,
+  Check, Star, ChevronDown, Mail, Quote, MessageSquare, Facebook, Instagram,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────
@@ -780,6 +780,10 @@ export default function ColbyWilliamsHome() {
                 <div className="flex items-center gap-2"><MapPin size={13} /> Athens, Alabama</div>
                 <div className="flex items-center gap-2"><Phone size={13} /> (256) 710-2384</div>
                 <div className="flex items-center gap-2"><Mail size={13} /> colbywilliamsre@gmail.com</div>
+              </div>
+              <div className="flex items-center gap-3" style={{ marginTop: 16 }}>
+                <a href="https://www.facebook.com/colby.williams.16906" target="_blank" rel="noopener noreferrer" aria-label="Colby Williams on Facebook" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.28)", color: "#fff" }}><Facebook size={16} /></a>
+                <a href="https://www.instagram.com/colbywilliamsrealtor/" target="_blank" rel="noopener noreferrer" aria-label="Colby Williams on Instagram" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 36, height: 36, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.28)", color: "#fff" }}><Instagram size={16} /></a>
               </div>
             </div>
           </div>
