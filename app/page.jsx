@@ -583,7 +583,7 @@ export default function ColbyWilliamsHome() {
             </div>
             <p className="mono" style={{ fontSize: 12, color: "var(--ink-soft)", letterSpacing: "0.06em", maxWidth: 260 }}>Every town here has its own feel, price points, and quirks. Here's where I help most.</p>
           </div>
-          <div className="grid gap-5 grid-4 reveal" style={{ gridTemplateColumns: "repeat(4,1fr)", marginTop: 36 }}>
+          <div className="grid gap-5 grid-4 reveal" style={{ gridTemplateColumns: "repeat(4,1fr)", marginTop: 48 }}>
             {[
               { key: "athens", name: "Athens", sub: "Homes for sale in Athens, AL" },
               { key: "madison", name: "Madison", sub: "Madison, AL real estate" },
