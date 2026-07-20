@@ -576,12 +576,10 @@ export default function ColbyWilliamsHome() {
       {/* COMMUNITIES */}
       <section id="communities" className="px-6" style={{ paddingTop: 64, paddingBottom: 56 }}>
         <div className="mx-auto" style={{ maxWidth: 1240 }}>
-          <div className="flex items-end justify-between flex-wrap gap-4 reveal">
-            <div>
-              <div className="eyebrow" style={{ marginBottom: 14 }}>Where I work</div>
-              <h2 style={{ fontSize: "clamp(30px,4vw,46px)", maxWidth: 620 }}>North Alabama, town by town</h2>
-            </div>
-            <p className="mono" style={{ fontSize: 12, color: "var(--ink-soft)", letterSpacing: "0.06em", maxWidth: 260 }}>Every town here has its own feel, price points, and quirks. Here's where I help most.</p>
+          <div className="reveal">
+            <div className="eyebrow" style={{ marginBottom: 14 }}>Where I work</div>
+            <h2 style={{ fontSize: "clamp(30px,4vw,46px)", maxWidth: 620 }}>North Alabama, town by town</h2>
+            <p style={{ fontSize: 17, color: "var(--ink-soft)", marginTop: 16, maxWidth: 560, lineHeight: 1.6 }}>Every town here has its own feel, price points, and quirks. Here's where I help most.</p>
           </div>
           <div className="grid gap-5 grid-4 reveal" style={{ gridTemplateColumns: "repeat(4,1fr)", marginTop: 48 }}>
             {[
