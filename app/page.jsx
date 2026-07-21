@@ -588,7 +588,7 @@ export default function ColbyWilliamsHome() {
               { key: "huntsville", name: "Huntsville", sub: "Huntsville homes & relocation" },
               { key: "decatur", name: "Decatur", sub: "River city, historic charm" },
             ].map((c) => (
-              <a key={c.key} href="#contact" className="tile" style={{ borderRadius: 2, overflow: "hidden", display: "block" }}>
+              <a key={c.key} href={"/communities/" + c.key} className="tile" style={{ borderRadius: 2, overflow: "hidden", display: "block" }}>
                 <Photo src={CITY[c.key]} style={{ aspectRatio: "3/4" }} caption={c.name} />
               </a>
             ))}
