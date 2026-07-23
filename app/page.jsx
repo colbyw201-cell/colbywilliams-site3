@@ -396,7 +396,19 @@ export default function ColbyWilliamsHome() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
+  
+useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    const go = () => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    const t1 = setTimeout(go, 100);
+    const t2 = setTimeout(go, 600);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [listings]);
+  
   useEffect(() => {
     const els = rootRef.current?.querySelectorAll(".reveal") || [];
     const io = new IntersectionObserver(
