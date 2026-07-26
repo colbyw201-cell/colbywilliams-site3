@@ -1,7 +1,3 @@
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const esc = (s) =>
   String(s).replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]));
 
@@ -61,14 +57,30 @@ export async function POST(request) {
       </div>
     `;
 
-    await resend.emails.send({
-      from: "Colby Williams Website <leads@colbywilliamsrealtor.com>",
-      to: "colbywilliamsre@gmail.com",
-      replyTo: email, // reply straight to the buyer from your inbox
-      subject: `New Buyer Lead: ${name}`,
-      text,
-      html,
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Colby Williams Website <leads@colbywilliamsrealtor.com>",
+        to: "colbywilliamsre@gmail.com",
+        reply_to: email, // reply straight to the buyer from your inbox
+        subject: `New Buyer Lead: ${name}`,
+        text,
+        html,
+      }),
     });
+
+    if (!res.ok) {
+      const detail = await res.text();
+      console.error("Resend error:", detail);
+      return Response.json(
+        { ok: false, error: "Email failed to send." },
+        { status: 502 }
+      );
+    }
 
     return Response.json({ ok: true });
   } catch (err) {
