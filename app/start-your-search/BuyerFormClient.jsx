@@ -2,9 +2,6 @@
 
 import { useState } from "react";
 
-const headlineFont = { fontFamily: '"Bricolage Grotesque", sans-serif' };
-const labelFont = { fontFamily: '"Times New Roman", Times, serif' };
-
 const priceOptions = [
   "Under $200k",
   "$200k - $300k",
@@ -34,8 +31,167 @@ const financingOptions = [
   "Not sure yet",
 ];
 
-const inputClass =
-  "w-full rounded-xl border border-neutral-200 bg-white px-4 py-3 text-[15px] text-neutral-900 outline-none transition focus:border-[#A52831] focus:ring-2 focus:ring-[#A52831]/20";
+// All styling lives here, scoped by the "sys-" prefix so it can't collide
+// with the rest of the site and doesn't depend on Tailwind or global CSS.
+const css = `
+  .sys-page {
+    min-height: 100vh;
+    background: #F4F1EB;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #1a1a1a;
+  }
+  .sys-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 20px 24px;
+  }
+  .sys-bar img { height: 34px; width: auto; display: block; }
+  .sys-bar a.sys-phone {
+    font-size: 14px;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .sys-bar a.sys-phone:hover { color: #A52831; }
+
+  .sys-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 16px 24px 96px;
+  }
+  .sys-head { text-align: center; margin-bottom: 32px; }
+  .sys-eyebrow {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #A52831;
+    margin: 0 0 14px;
+  }
+  .sys-title {
+    font-family: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+    font-size: 40px;
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #1a1a1a;
+    margin: 0;
+  }
+  .sys-sub {
+    max-width: 440px;
+    margin: 16px auto 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #5f5b54;
+  }
+
+  .sys-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(40,30,20,0.06);
+  }
+  .sys-field { margin-bottom: 20px; }
+  .sys-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .sys-row .sys-field { margin-bottom: 0; }
+  .sys-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b6b6b;
+    margin-bottom: 7px;
+  }
+  .sys-input, .sys-select, .sys-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #E4DFD5;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 13px 15px;
+    font-size: 15px;
+    font-family: inherit;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .sys-textarea { resize: vertical; min-height: 92px; }
+  .sys-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6b6b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+  .sys-input::placeholder, .sys-textarea::placeholder { color: #b3ada2; }
+  .sys-input:focus, .sys-select:focus, .sys-textarea:focus {
+    border-color: #A52831;
+    box-shadow: 0 0 0 3px rgba(165,40,49,0.12);
+  }
+
+  .sys-btn {
+    width: 100%;
+    border: none;
+    background: #A52831;
+    color: #ffffff;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .15s ease, transform .05s ease;
+    margin-top: 4px;
+  }
+  .sys-btn:hover { background: #8a1f27; }
+  .sys-btn:active { transform: translateY(1px); }
+  .sys-btn:disabled { opacity: .65; cursor: not-allowed; }
+
+  .sys-fine {
+    text-align: center;
+    font-size: 13px;
+    color: #a09a8f;
+    margin: 16px 0 0;
+  }
+  .sys-error {
+    font-size: 14px;
+    color: #A52831;
+    margin: 0 0 16px;
+  }
+
+  .sys-success { text-align: center; padding: 24px 8px; }
+  .sys-success h2 {
+    font-family: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 12px;
+  }
+  .sys-success p {
+    max-width: 380px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #5f5b54;
+  }
+
+  @media (max-width: 560px) {
+    .sys-title { font-size: 32px; }
+    .sys-card { padding: 24px 20px; }
+    .sys-row { grid-template-columns: 1fr; gap: 20px; margin-bottom: 20px; }
+    .sys-row .sys-field { margin-bottom: 0; }
+  }
+`;
 
 export default function BuyerFormClient() {
   const [form, setForm] = useState({
@@ -70,48 +226,46 @@ export default function BuyerFormClient() {
   };
 
   return (
-    <section className="bg-[#F7F4EF] px-5 py-16 sm:py-24">
-      <div className="mx-auto max-w-2xl">
-        <div className="mb-8 text-center">
-          <p
-            style={labelFont}
-            className="mb-3 text-xs uppercase tracking-[0.18em] text-[#A52831]"
-          >
-            Start Your Search
-          </p>
-          <h1
-            style={headlineFont}
-            className="text-3xl font-semibold leading-tight text-neutral-900 sm:text-4xl"
-          >
-            Let's find the right home for you
-          </h1>
-          <p className="mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-neutral-600">
-            Tell me a little about what you're after and I'll pull homes that
-            actually fit. No spam, no pressure. Just real help from someone who
-            knows North Alabama.
+    <div className="sys-page">
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+
+      <div className="sys-bar">
+        <a href="/" aria-label="Colby Williams, Innovative Realty Solutions home">
+          <img
+            src="/images/wordmark.png"
+            alt="Innovative Realty Solutions"
+          />
+        </a>
+        <a className="sys-phone" href="tel:+12567102384">
+          Call or text: (256) 710-2384
+        </a>
+      </div>
+
+      <div className="sys-wrap">
+        <div className="sys-head">
+          <p className="sys-eyebrow">Start Your Search</p>
+          <h1 className="sys-title">Let&apos;s find the right home for you</h1>
+          <p className="sys-sub">
+            Tell me a little about what you&apos;re after and I&apos;ll pull homes
+            that actually fit. No spam, no pressure. Just real help from someone
+            who knows North Alabama.
           </p>
         </div>
 
         {status === "success" ? (
-          <div className="rounded-2xl bg-white p-10 text-center shadow-sm ring-1 ring-black/5">
-            <h2
-              style={headlineFont}
-              className="text-2xl font-semibold text-neutral-900"
-            >
-              Got it. I'll be in touch soon.
-            </h2>
-            <p className="mx-auto mt-3 max-w-sm text-[15px] leading-relaxed text-neutral-600">
-              Thanks {form.name.split(" ")[0] || "there"}. I'll review what you're
-              looking for and reach out with homes worth your time. Usually same
-              day.
-            </p>
+          <div className="sys-card">
+            <div className="sys-success">
+              <h2>Got it. I&apos;ll be in touch soon.</h2>
+              <p>
+                Thanks {form.name.split(" ")[0] || "there"}. I&apos;ll review what
+                you&apos;re looking for and reach out with homes worth your time.
+                Usually same day.
+              </p>
+            </div>
           </div>
         ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-black/5 sm:p-8"
-          >
-            {/* Honeypot: hidden from people, tempting to bots */}
+          <form className="sys-card" onSubmit={handleSubmit}>
+            {/* Honeypot: hidden inline so it stays hidden no matter what */}
             <input
               type="text"
               name="company"
@@ -120,211 +274,182 @@ export default function BuyerFormClient() {
               tabIndex={-1}
               autoComplete="off"
               aria-hidden="true"
-              className="absolute left-[-9999px] h-0 w-0 opacity-0"
+              style={{
+                position: "absolute",
+                left: "-9999px",
+                width: 1,
+                height: 1,
+                opacity: 0,
+              }}
             />
 
-            <div className="space-y-5">
-              <div>
-                <label
-                  htmlFor="name"
-                  style={labelFont}
-                  className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                >
-                  Full name
+            <div className="sys-field">
+              <label className="sys-label" htmlFor="name">
+                Full name
+              </label>
+              <input
+                className="sys-input"
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={form.name}
+                onChange={update}
+                placeholder="Jane Smith"
+              />
+            </div>
+
+            <div className="sys-row">
+              <div className="sys-field">
+                <label className="sys-label" htmlFor="email">
+                  Email
                 </label>
                 <input
-                  id="name"
-                  name="name"
-                  type="text"
+                  className="sys-input"
+                  id="email"
+                  name="email"
+                  type="email"
                   required
-                  value={form.name}
+                  value={form.email}
                   onChange={update}
-                  className={inputClass}
-                  placeholder="Jane Smith"
+                  placeholder="you@email.com"
                 />
               </div>
-
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="email"
-                    style={labelFont}
-                    className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                  >
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={update}
-                    className={inputClass}
-                    placeholder="you@email.com"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="phone"
-                    style={labelFont}
-                    className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                  >
-                    Phone
-                  </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    required
-                    value={form.phone}
-                    onChange={update}
-                    className={inputClass}
-                    placeholder="(256) 555-0123"
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="priceRange"
-                    style={labelFont}
-                    className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                  >
-                    Price range
-                  </label>
-                  <select
-                    id="priceRange"
-                    name="priceRange"
-                    value={form.priceRange}
-                    onChange={update}
-                    className={inputClass}
-                  >
-                    <option value="">Select one</option>
-                    {priceOptions.map((o) => (
-                      <option key={o} value={o}>
-                        {o}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="area"
-                    style={labelFont}
-                    className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                  >
-                    Area
-                  </label>
-                  <select
-                    id="area"
-                    name="area"
-                    value={form.area}
-                    onChange={update}
-                    className={inputClass}
-                  >
-                    <option value="">Select one</option>
-                    {areaOptions.map((o) => (
-                      <option key={o} value={o}>
-                        {o}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label
-                    htmlFor="timeline"
-                    style={labelFont}
-                    className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                  >
-                    Timeline
-                  </label>
-                  <select
-                    id="timeline"
-                    name="timeline"
-                    value={form.timeline}
-                    onChange={update}
-                    className={inputClass}
-                  >
-                    <option value="">Select one</option>
-                    {timelineOptions.map((o) => (
-                      <option key={o} value={o}>
-                        {o}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label
-                    htmlFor="financing"
-                    style={labelFont}
-                    className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                  >
-                    Financing
-                  </label>
-                  <select
-                    id="financing"
-                    name="financing"
-                    value={form.financing}
-                    onChange={update}
-                    className={inputClass}
-                  >
-                    <option value="">Select one</option>
-                    {financingOptions.map((o) => (
-                      <option key={o} value={o}>
-                        {o}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="notes"
-                  style={labelFont}
-                  className="mb-1.5 block text-xs uppercase tracking-wider text-neutral-500"
-                >
-                  Anything specific you want? (optional)
+              <div className="sys-field">
+                <label className="sys-label" htmlFor="phone">
+                  Phone
                 </label>
-                <textarea
-                  id="notes"
-                  name="notes"
-                  rows={3}
-                  value={form.notes}
+                <input
+                  className="sys-input"
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  value={form.phone}
                   onChange={update}
-                  className={inputClass}
-                  placeholder="Big yard, good schools, shop in back, etc."
+                  placeholder="(256) 555-0123"
                 />
               </div>
-
-              {status === "error" && (
-                <p className="text-sm text-[#A52831]">
-                  Something went wrong sending that. Try again, or text me
-                  directly.
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="w-full rounded-xl bg-[#A52831] px-6 py-3.5 text-[15px] font-medium text-white transition hover:bg-[#8f222b] disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {status === "loading" ? "Sending..." : "Start My Search"}
-              </button>
-
-              <p className="text-center text-xs text-neutral-400">
-                Your info stays private. I'll only use it to help with your home
-                search.
-              </p>
             </div>
+
+            <div className="sys-row">
+              <div className="sys-field">
+                <label className="sys-label" htmlFor="priceRange">
+                  Price range
+                </label>
+                <select
+                  className="sys-select"
+                  id="priceRange"
+                  name="priceRange"
+                  value={form.priceRange}
+                  onChange={update}
+                >
+                  <option value="">Select one</option>
+                  {priceOptions.map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="sys-field">
+                <label className="sys-label" htmlFor="area">
+                  Area
+                </label>
+                <select
+                  className="sys-select"
+                  id="area"
+                  name="area"
+                  value={form.area}
+                  onChange={update}
+                >
+                  <option value="">Select one</option>
+                  {areaOptions.map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="sys-row">
+              <div className="sys-field">
+                <label className="sys-label" htmlFor="timeline">
+                  Timeline
+                </label>
+                <select
+                  className="sys-select"
+                  id="timeline"
+                  name="timeline"
+                  value={form.timeline}
+                  onChange={update}
+                >
+                  <option value="">Select one</option>
+                  {timelineOptions.map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="sys-field">
+                <label className="sys-label" htmlFor="financing">
+                  Financing
+                </label>
+                <select
+                  className="sys-select"
+                  id="financing"
+                  name="financing"
+                  value={form.financing}
+                  onChange={update}
+                >
+                  <option value="">Select one</option>
+                  {financingOptions.map((o) => (
+                    <option key={o} value={o}>
+                      {o}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="sys-field">
+              <label className="sys-label" htmlFor="notes">
+                Anything specific you want? (optional)
+              </label>
+              <textarea
+                className="sys-textarea"
+                id="notes"
+                name="notes"
+                rows={3}
+                value={form.notes}
+                onChange={update}
+                placeholder="Big yard, good schools, shop in back, etc."
+              />
+            </div>
+
+            {status === "error" && (
+              <p className="sys-error">
+                Something went wrong sending that. Try again, or text me directly
+                at (256) 710-2384.
+              </p>
+            )}
+
+            <button
+              className="sys-btn"
+              type="submit"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? "Sending..." : "Start My Search"}
+            </button>
+
+            <p className="sys-fine">
+              Goes straight to Colby, never sold or shared.
+            </p>
           </form>
         )}
       </div>
-    </section>
+    </div>
   );
 }
