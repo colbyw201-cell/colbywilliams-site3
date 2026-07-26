@@ -613,7 +613,7 @@ useEffect(() => {
         <div className="mx-auto grid gap-6 grid-2 reveal" style={{ maxWidth: 1240, gridTemplateColumns: "1fr 1fr" }}>
           {[
             { icon: <Home size={22} />, t: "Thinking about selling?", d: "Start by knowing your number. I'll pull real, recent North Alabama sales (not a random online estimate) so you know what your home would actually bring today, with zero obligation to list.", cta: "Get my home value", href: "#valuation", primary: true },
-            { icon: <Key size={22} />, t: "Looking for a home?", d: "First home, move-up, or a relocation to the Huntsville area. I'll help you figure out what you can afford, where to look, and how to win without overpaying.", cta: "Start your search", href: "https://colbywilliams.valleymls.com", primary: false },
+            { icon: <Key size={22} />, t: "Looking for a home?", d: "First home, move-up, or a relocation to the Huntsville area. I'll help you figure out what you can afford, where to look, and how to win without overpaying.", cta: "Start your search", href: "/start-your-search", primary: false },
           ].map((p) => (
             <div key={p.t} style={{ padding: 38, background: "var(--paper)", border: "1px solid var(--line)", borderRadius: 2 }}>
               <div className="flex items-center justify-center" style={{ width: 50, height: 50, borderRadius: 2, background: "var(--mist)", color: "var(--brand)" }}>{p.icon}</div>
