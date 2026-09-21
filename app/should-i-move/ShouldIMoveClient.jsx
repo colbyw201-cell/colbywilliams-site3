@@ -16,7 +16,7 @@ import {
   COMFORT_DTI,
   MAX_DTI,
   AREAS,
-} from '../../lib/moveAssumptions';
+} from '../lib/moveAssumptions';
 
 const EMPTY = {
   value: '',
