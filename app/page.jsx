@@ -4,6 +4,7 @@ import {
   Menu, X, Phone, MapPin, ArrowRight, ArrowUpRight, Home, Key,
   Check, Star, ChevronDown, Mail, Quote, MessageSquare, Facebook, Instagram,
 } from "lucide-react";
+import MoveCTA from "./should-i-move/MoveCTA";
 
 // ─────────────────────────────────────────────────────────────
 // Colby Williams · Innovative Realty Solutions
@@ -255,6 +256,7 @@ function Photo({ src, style, caption, sub }) {
 const NAV = [
   { label: "Listings", href: "#listings" },
   { label: "Home Value", href: "#valuation" },
+    { label: "Should I Move?", href: "/should-i-move" },
   { label: "FAQ", href: "#faq" },
 ];
 
@@ -550,6 +552,7 @@ useEffect(() => {
         </div>
       </section>
 
+            <MoveCTA />
       {/* ABOUT */}
       <section id="about" className="px-6" style={{ paddingTop: 96, paddingBottom: 56 }}>
         <div className="mx-auto grid items-center gap-16 split reveal" style={{ maxWidth: 1240, gridTemplateColumns: "0.85fr 1.15fr" }}>
