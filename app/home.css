@@ -1,0 +1,98 @@
+/* Homepage styles (Tailwind v4). Imported only by app/page.jsx, so the
+   other pages keep their original styling from globals.css. */
+@import "tailwindcss";
+
+/* Brand tokens */
+:root {
+  --cream: #f4f1ec;
+  --paper: #fcfbf9;
+  --sand: #ebe5dc;
+  --ink: #16130f;
+  --ink-soft: #57534c;
+  --red: #a52831;
+  --red-deep: #861f27;
+  --line: #e2dbd0;
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-red: var(--red);
+  --color-red-deep: var(--red-deep);
+  --color-line: var(--line);
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes float {
+  50% { transform: translateY(-8px); }
+}
+
+/* globals.css defines unlayered helpers (.flex, .hidden, .gap-4, …) for the other
+   pages. Unlayered CSS always beats Tailwind's layered utilities, which would break
+   responsive classes like "hidden lg:block" here — so hand those properties back
+   to Tailwind inside the homepage. */
+.home.home * {
+  display: revert-layer;
+  flex-direction: revert-layer;
+  flex-wrap: revert-layer;
+  align-items: revert-layer;
+  justify-content: revert-layer;
+  width: revert-layer;
+  margin-left: revert-layer;
+  margin-right: revert-layer;
+  margin-top: revert-layer;
+  padding-left: revert-layer;
+  padding-right: revert-layer;
+  padding-bottom: revert-layer;
+  gap: revert-layer;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+  body { background: var(--cream); }
+  .home {
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .home ::selection { background: var(--red); color: white; }
+  .home :is(a, button, label[for], summary) { cursor: pointer; }
+  .home :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 2px; }
+}
+
+/* Subtle paper grain, like the original site */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .home *, .home *::before, .home *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
