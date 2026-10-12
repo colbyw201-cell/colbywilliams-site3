@@ -1,9 +1,15 @@
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 
-import { Footer } from "@/components/sections/footer";
-import { contact } from "@/lib/content";
-import { SITE_URL } from "@/lib/site";
-import "../home.css";
+// Self-contained on purpose: no other files from the site are needed.
+const SITE_URL = "https://www.colbywilliamsrealtor.com";
+const contact = {
+  name: "Colby Williams",
+  brokerage: "Innovative Realty Solutions",
+  city: "Athens, Alabama",
+  phone: "(256) 710-2384",
+  tel: "+12567102384",
+  email: "colbywilliamsre@gmail.com",
+};
 
 const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", weight: ["500", "600", "700", "800"] });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -19,6 +25,7 @@ export const metadata = {
 };
 
 const s = {
+  page: { background: "#F4F1EC", minHeight: "100vh" },
   main: { maxWidth: 760, margin: "0 auto", padding: "64px 20px 80px", color: "#16130f", fontFamily: "var(--font-inter), system-ui, sans-serif", lineHeight: 1.7 },
   back: { color: "#a52831", textDecoration: "none", fontWeight: 600, fontSize: 14 },
   h1: { fontFamily: "var(--font-bricolage), sans-serif", fontWeight: 700, fontSize: 44, lineHeight: 1.1, margin: "24px 0 8px" },
@@ -40,7 +47,7 @@ function Section({ title, children }) {
 
 export default function PrivacyPage() {
   return (
-    <div className={`home ${bricolage.variable} ${inter.variable}`}>
+    <div className={`${bricolage.variable} ${inter.variable}`} style={s.page}>
       <main style={s.main}>
         <a href="/" style={s.back}>&larr; Back to home</a>
         <h1 style={s.h1}>Privacy Policy</h1>
@@ -153,7 +160,6 @@ export default function PrivacyPage() {
           </p>
         </Section>
       </main>
-      <Footer />
     </div>
   );
 }
